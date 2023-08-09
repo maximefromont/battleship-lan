@@ -8,8 +8,8 @@ public class Main
     String  answer  = "";
     while (!answer.equals("H") && !answer.equals("C"))
     {
-      System.out.println("Do you want to host or connect to a bn ? H/C");
-      answer = scanner.next();
+      System.out.println("Do you want to host or connect ? H/C");
+      answer = scanner.next().toUpperCase();
       if (!answer.equals("H") && !answer.equals("C"))
       {
         System.out.println("Please, answer with \"H\" for hosting or \"C\" for connecting.\n");
@@ -26,4 +26,8 @@ public class Main
         break;
     }
   }
+
+  //GAMES SETTINGS
+  public static final int BATTLESHIP_ARRAY_SIZE = 10;
+  public static final int[] BATTLESHIP_BOATS_TYPES = {4, 3, 2, 1};
 }
