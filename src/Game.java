@@ -210,7 +210,7 @@ public class Game
 
   //PRIVATE CONSTANTS
   public static final int BATTLESHIP_GRID_SIZE = 10;
-  public static final int[] BATTLESHIP_BOATS_TYPES = {1, 1, 0, 0};
+  public static final int[] BATTLESHIP_BOATS_TYPES = {4, 3, 2, 1};
   public static final String END_OF_TURN = "EOT";
   public static final String END_OF_GAME = "EOG";
   public static final String ALREADY_HIT = "AH";
