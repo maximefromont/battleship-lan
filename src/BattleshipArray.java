@@ -68,14 +68,6 @@ public class BattleshipArray
 
   }
 
-  public static int[] getCoordinateFromBattleshipCoordinate(String battleship_coordinate)
-  {
-    int[] coordinates = new int[2];
-    coordinates[0] = getLetterToNumber(battleship_coordinate.charAt(0));
-    coordinates[1] = Integer.parseInt(battleship_coordinate.substring(1)) - 1; //-1 because A1 is in fact 0 ; 0
-    return coordinates;
-  }
-
   public void setArrayCell(int x, int y, int value)
   {
     _array[x][y] = value;
@@ -133,34 +125,6 @@ public class BattleshipArray
           validation = addBoatInArray(x_start, y_start, x_start, y_start + (boat_size - 1), SUBMARINE_CELL + (boat_size - 1));
       }
     } while (validation == false);
-  }
-
-  private static int getLetterToNumber(char letter)
-  {
-    switch (letter)
-    {
-      case 'A':
-        return 0;
-      case 'B':
-        return 1;
-      case 'C':
-        return 2;
-      case 'D':
-        return 3;
-      case 'E':
-        return 4;
-      case 'F':
-        return 5;
-      case 'G':
-        return 6;
-      case 'H':
-        return 7;
-      case 'I':
-        return 8;
-      case 'J':
-        return 9;
-    }
-    return -1;
   }
 
   //PRIVATE ATTRIBUTES

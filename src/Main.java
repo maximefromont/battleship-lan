@@ -26,8 +26,4 @@ public class Main
         break;
     }
   }
-
-  //GAMES SETTINGS
-  public static final int BATTLESHIP_ARRAY_SIZE = 10;
-  public static final int[] BATTLESHIP_BOATS_TYPES = {4, 3, 2, 1};
 }
