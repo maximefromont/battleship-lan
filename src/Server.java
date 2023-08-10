@@ -11,7 +11,7 @@ public class Server
     try
     {
       _server_socket = new ServerSocket(10);
-      System.out.println("The hosting server is up.");
+      System.out.println("The hosting server is now up.");
 
       _socket             = _server_socket.accept();
 
@@ -23,6 +23,17 @@ public class Server
     }
 
     serverBattleshipGame();
+
+    try {
+      _socket.close();
+      System.out.println("You have been successfully disconnected from the client.");
+      _server_socket.close();
+      System.out.println("The hosting server is now down.");
+    }
+    catch (IOException exception)
+    {
+      System.out.println("Something went wrong when trying to close the server. Please report it to the developers.");
+    }
   }
 
   //PRIVATE INTERFACE
@@ -35,11 +46,15 @@ public class Server
     game.initDefenseBoats();
 
     //Game loop
-    while (true)
+    while (!game.isFinished())
     {
       game.launchDefenseTurn();
-      game.launchAttackTurn();
+
+      if(!game.isFinished())
+        game.launchAttackTurn();
     }
+
+    game.printEndMessage();
   }
 
   //PRIVATE ATTRIBUTES

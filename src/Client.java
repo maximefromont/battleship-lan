@@ -11,7 +11,7 @@ public class Client
     while (!valid_ip_adress)
     {
       Scanner scanner = new Scanner(System.in);
-      System.out.println("Please enter the server ip adress : ");
+      System.out.println("Please enter the server ip address : ");
       String ip_adress = scanner.next();
       try
       {
@@ -21,11 +21,21 @@ public class Client
         valid_ip_adress = true;
       } catch (IOException exception)
       {
-        System.out.println("Please make sure the IP adress is correctly written or ensure the host started their server before you try connecting.");
+        System.out.println("Please make sure the IP address is correctly written or ensure the host started their server before you try connecting.");
       }
     }
 
     runClientBattleshipGame();
+
+    try
+    {
+      _socket.close();
+      System.out.println("You have been successfully disconnected from the host.");
+    }
+    catch (IOException exception)
+    {
+      System.out.println("Something went wrong when trying to close the connection. Please report it to the developers.");
+    }
   }
 
   //PRIVATE INTERFACE
@@ -38,11 +48,15 @@ public class Client
     game.initDefenseBoats();
 
     //Game loop
-    while(true)
+    while(!game.isFinished())
     {
       game.launchAttackTurn();
-      game.launchDefenseTurn();
+
+      if(!game.isFinished())
+        game.launchDefenseTurn();
     }
+
+    game.printEndMessage();
   }
 
   //PRIVATE ATTRIBUTES

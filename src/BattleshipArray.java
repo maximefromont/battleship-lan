@@ -65,9 +65,9 @@ public class BattleshipArray
     try {
       for(int i = 0; i < boats_types.length; i++)
       {
-        for(int j = 1; j <= boats_types[i]; j++)
+        for(int j = 0; j < boats_types[i]; j++)
         {
-          generateBoat(j); //Size of current type is place in type array +1 since array start at 0
+          generateBoat(i+1); //Size of current type is place in type array +1 since array start at 0
         }
       }
     } catch (ArrayIndexOutOfBoundsException e)
@@ -103,6 +103,18 @@ public class BattleshipArray
   public int getArrayCell(int x, int y)
   {
     return _array[x][y];
+  }
+
+  public int getAmountOfHit()
+  {
+    int hit_ammount = 0;
+
+    for(int x = 0; x < _size; x++)
+      for(int y = 0; y < _size; y++)
+        if(_array[x][y] == HIT_CELL)
+          hit_ammount++;
+
+    return hit_ammount;
   }
 
   //PUBLIC CONSTANTS

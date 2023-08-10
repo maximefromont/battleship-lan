@@ -9,12 +9,12 @@ public class Coordinate
   throws IllegalBattleshipCoordinateException
   {
     Pattern pattern = Pattern.compile(BATTLESHIP_COORDINATE_REGEX);
-    Matcher matcher = pattern.matcher(battleship_coordinate);
+    Matcher matcher = pattern.matcher(battleship_coordinate.toUpperCase());
     if (matcher.find())
     {
       _x_coordinate = getLetterToNumber(matcher.group(1));
       _y_coordinate    = Integer.parseInt(matcher.group(2)) - 1; //Minus one because A1 is 0 ; 0 and not 0 ; 1
-      _text_coordinate = battleship_coordinate;
+      _text_coordinate = battleship_coordinate.toUpperCase();
     }
     else
       throw new IllegalBattleshipCoordinateException("Invalid battleship coordinates");

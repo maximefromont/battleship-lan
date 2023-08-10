@@ -15,7 +15,7 @@ public class Game
 
   public void initDefenseBoats()
   {
-    _defense_array.placeRandomBoat(BATTLESHIP_BOATS_TYPES);
+    _defense_grid.placeRandomBoat(BATTLESHIP_BOATS_TYPES);
   }
 
   public void launchAttackTurn()
@@ -29,8 +29,8 @@ public class Game
     do
     {
       System.out.println(""); //Give the UI a little bit of space
-      System.out.println("Here is your ATTACK ARRAY : ");
-      System.out.println(_attack_array.toString());
+      System.out.println("Here is your ATTACK GRID : ");
+      System.out.println(_attack_grid.toString());
 
       //Attack attempt
       boolean valid_coordinate = false;
@@ -60,7 +60,7 @@ public class Game
       else
       {
         int cell_value = Integer.parseInt(in_message);
-        _attack_array.setArrayCell(attack_coordinate.get_x_coordinate(), attack_coordinate.get_y_coordinate(), cell_value);
+        _attack_grid.setArrayCell(attack_coordinate.get_x_coordinate(), attack_coordinate.get_y_coordinate(), cell_value);
         switch (cell_value)
         {
           case BattleshipArray.MISS_CELL:
@@ -69,12 +69,27 @@ public class Game
             break;
           case BattleshipArray.HIT_CELL:
             System.out.println("It's a HIT !");
-            replay = true;
+            if (!isWon())
+            {
+              System.out.println("You hit " + (_attack_grid.getAmountOfHit()*100)/getTotalLenghthOfBoats()+ "% of your enemy boats.");
+              replay = true;
+            }
+            else
+            {
+              replay = false; //No replay because the user just won.
+              _is_finished = true;
+            }
             break;
         }
       }
+
     } while (replay == true);
-    sendMessage(END_OF_TURN);
+    if(_is_finished)
+    {
+      sendMessage(END_OF_GAME);
+    }
+    else
+      sendMessage(END_OF_TURN);
   }
 
   public void launchDefenseTurn()
@@ -89,6 +104,13 @@ public class Game
     while (!in_message.equals(END_OF_TURN))
     {
       in_message = recieveMessage();
+
+      if(in_message.equals(END_OF_GAME))
+      {
+        _is_finished = true;
+        return;
+      }
+
       if(!in_message.equals(END_OF_TURN))
       {
         try
@@ -100,22 +122,22 @@ public class Game
           e.printStackTrace();
         }
 
-        int type_of_boat = _defense_array.getArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate());
+        int type_of_boat = _defense_grid.getArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate());
         if (type_of_boat >= BattleshipArray.SUBMARINE_CELL)
         {
-          _defense_array.setArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate(), type_of_boat+4); //+4 to change type to hit type (See constants of BattleshipArray)
+          _defense_grid.setArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate(), type_of_boat+4); //+4 to change type to hit type (See constants of BattleshipArray)
           System.out.println("Your opponent HIT you in " + coordinate.get_text_coordinate() +".");
           sendMessage(String.valueOf(BattleshipArray.HIT_CELL));
         }
         else
         {
-          if(_defense_array.getArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate()) != BattleshipArray.EMPTY_CELL)
+          if(_defense_grid.getArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate()) != BattleshipArray.EMPTY_CELL)
           {
             sendMessage(ALREADY_HIT);
           }
           else
           {
-            _defense_array.setArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate(), BattleshipArray.MISS_CELL);
+            _defense_grid.setArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate(), BattleshipArray.MISS_CELL);
             System.out.println("Your opponent MISSED in " + coordinate.get_text_coordinate() +".");
             sendMessage(String.valueOf(BattleshipArray.MISS_CELL));
           }
@@ -123,11 +145,37 @@ public class Game
       }
     }
 
-    System.out.println("Here is you DEFENSE ARRAY after this enemy attack : ");
-    System.out.println(_defense_array.toString());
+    System.out.println("Here is you DEFENSE GRID after this enemy attack : ");
+    System.out.println(_defense_grid.toString());
+  }
+
+  public boolean isWon()
+  {
+    return _attack_grid.getAmountOfHit() >= getTotalLenghthOfBoats();
+  }
+
+  public void printEndMessage()
+  {
+    if(isWon()) System.out.println("Congratulations, you won the game !"); else System.out.println("Unfortunately, you lost the game.");
+    System.out.println("Press enter to close the connection.");
+    String enterPressed = new Scanner(System.in).nextLine(); //EnterPressed is never used because we're simply checking that the user press enter.
+  }
+
+  public boolean isFinished()
+  {
+    return _is_finished;
   }
 
   //PRIVATE INTERFACE
+  private int getTotalLenghthOfBoats()
+  {
+    int lenght_of_all_boat = 0;
+
+    for(int i = 0; i < BATTLESHIP_BOATS_TYPES.length; i++)
+        lenght_of_all_boat += BATTLESHIP_BOATS_TYPES[i] * (i+1);
+
+    return lenght_of_all_boat;
+  }
   private void sendMessage(String out_message) {
     try
     {
@@ -154,14 +202,16 @@ public class Game
   }
 
   //PRIVATE ATTRIBUTES
-  private BattleshipArray _attack_array = new BattleshipArray(BATTLESHIP_ARRAY_SIZE);
-  private BattleshipArray _defense_array = new BattleshipArray(BATTLESHIP_ARRAY_SIZE);
+  private BattleshipArray _attack_grid  = new BattleshipArray(BATTLESHIP_GRID_SIZE);
+  private BattleshipArray _defense_grid = new BattleshipArray(BATTLESHIP_GRID_SIZE);
   private DataInputStream _data_input_stream;
   private DataOutputStream _data_output_stream;
+  private boolean _is_finished = false;
 
   //PRIVATE CONSTANTS
-  public static final int BATTLESHIP_ARRAY_SIZE = 10;
-  public static final int[] BATTLESHIP_BOATS_TYPES = {4, 3, 2, 1};
+  public static final int BATTLESHIP_GRID_SIZE = 10;
+  public static final int[] BATTLESHIP_BOATS_TYPES = {1, 1, 0, 0};
   public static final String END_OF_TURN = "EOT";
+  public static final String END_OF_GAME = "EOG";
   public static final String ALREADY_HIT = "AH";
 }
