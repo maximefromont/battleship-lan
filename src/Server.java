@@ -11,8 +11,10 @@ public class Server
     try
     {
       _server_socket = new ServerSocket(10);
-      _socket        = _server_socket.accept();
       System.out.println("The hosting server is up.");
+
+      _socket             = _server_socket.accept();
+
       _data_input_stream  = new DataInputStream(_socket.getInputStream());
       _data_output_stream = new DataOutputStream(_socket.getOutputStream());
     } catch (IOException exception)
