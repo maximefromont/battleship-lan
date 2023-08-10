@@ -99,9 +99,11 @@ public class Game
         {
           e.printStackTrace();
         }
-        if (_defense_array.getArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate()) >= BattleshipArray.SUBMARINE_CELL)
+
+        int type_of_boat = _defense_array.getArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate());
+        if (type_of_boat >= BattleshipArray.SUBMARINE_CELL)
         {
-          _defense_array.setArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate(), BattleshipArray.BOAT_HIT_CELL);
+          _defense_array.setArrayCell(coordinate.get_x_coordinate(), coordinate.get_y_coordinate(), type_of_boat+4); //+4 to change type to hit type (See constants of BattleshipArray)
           System.out.println("Your opponent HIT you in " + coordinate.get_text_coordinate() +".");
           sendMessage(String.valueOf(BattleshipArray.HIT_CELL));
         }

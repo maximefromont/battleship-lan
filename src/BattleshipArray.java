@@ -21,28 +21,37 @@ public class BattleshipArray
         switch (_array[x][y])
         {
           case EMPTY_CELL:
-            string += " 0 ";
+            string += "|   |";
             break;
           case MISS_CELL:
-            string += " 1 ";
+            string += "| 0 |";
             break;
           case HIT_CELL:
-            string += " 2 ";
-            break;
-          case BOAT_HIT_CELL:
-            string += "(2)";
+            string += "|( )|";
             break;
           case SUBMARINE_CELL:
-            string += "(4)";
+            string += "| 1 |";
             break;
           case SMALLBOAT_CELL:
-            string += "(5)";
+            string += "| 2 |";
             break;
           case CRUISER_CELL:
-            string += "(6)";
+            string += "| 3 |";
             break;
           case CARRIER_CELL:
-            string += "(7)";
+            string += "| 4 |";
+            break;
+          case SUBMARINE_HIT_CELL:
+            string += "|(1)|";
+            break;
+          case SMALLBOAT_HIT_CELL:
+            string += "|(2)|";
+            break;
+          case CRUISER_HIT_CELL:
+            string += "|(3)|";
+            break;
+          case CARRIER_HIT_CELL:
+            string += "|(4)|";
             break;
         }
       }
@@ -100,11 +109,14 @@ public class BattleshipArray
   public static final int EMPTY_CELL = 0;
   public static final int MISS_CELL = 1;
   public static final int HIT_CELL = 2;
-  public static final int BOAT_HIT_CELL = 3;
-  public static final int SUBMARINE_CELL = 4;
-  public static final int SMALLBOAT_CELL = 5;
-  public static final int CRUISER_CELL = 6;
-  public static final int CARRIER_CELL = 7;
+  public static final int SUBMARINE_CELL = 3;
+  public static final int SMALLBOAT_CELL = 4;
+  public static final int CRUISER_CELL = 5;
+  public static final int CARRIER_CELL = 6;
+  public static final int SUBMARINE_HIT_CELL = 7;
+  public static final int SMALLBOAT_HIT_CELL = 8;
+  public static final int CRUISER_HIT_CELL = 9;
+  public static final int CARRIER_HIT_CELL = 10;
 
   //PRIVATE INTERFACE
   private void generateBoat(int boat_size) throws ArrayIndexOutOfBoundsException
